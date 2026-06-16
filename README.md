@@ -24,5 +24,10 @@ Head over to the **Releases** section on the right side of this page to download
 1. Clone this repository to your local machine.
 2. Open **Command Prompt** or **PowerShell** and navigate to the folder.
 3. Install the required dependencies:
-   ```cmd
-   pip install -r requirements.txt
+    ```cmd
+    pip install -r requirements.txt
+    ```
+4. Run the application:
+    ```cmd
+    python main.py
+    ```
