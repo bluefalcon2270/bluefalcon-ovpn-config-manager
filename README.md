@@ -2,67 +2,40 @@
 
 # 🔐 BlueFalcon OpenVPN Config Manager
 
-**A professional, Material Design 3 Windows utility to safely batch-process and manage OpenVPN configuration files.**
+**A professional mini app to manage OpenVPN configs and automate logins with your username and password.**
 
 ![Windows](https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
-[![Language](https://img.shields.io/badge/Written%20in-Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![UI Framework](https://img.shields.io/badge/Framework-PyQt6-41CD52?style=for-the-badge&logo=qt&logoColor=white)](https://riverbankcomputing.com/software/pyqt/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@BlueFalcon2270)
 
 <br />
 </div>
 
-An automated, elegant desktop application designed to completely manage your OpenVPN (`.ovpn`) files. It allows you to monitor, inject, and completely wipe inline credentials, as well as automatically rename files based on their destination host configuration. Built exclusively for Windows environments using modern Python 3.10+ and PyQt6, wrapped in a beautiful dark Google Material Design 3 UI layer.
+An automated desktop application designed to manage your OpenVPN (`.ovpn`) files. It allows you to monitor, inject, and remove credentials, as well as automatically rename files based on their destination server.
 <br><br>
 
-## ⚡ Quick Start
+## 📥 Download and Run
 
-### Option A: Download Compiled Executable (Recommended)
-No installation or Python required. Head over to the **Releases** section on the right side of this repository and download the standalone `BlueFalcon_OpenVPN_Manager.exe`. Double-click to run.
-
-### Option B: Run from Source
-If you prefer to run the raw Python script, open **Command Prompt** or **PowerShell** and run:
-
-```cmd
-git clone [https://github.com/bluefalcon2270/bluefalcon-ovpn-config-manager.git](https://github.com/bluefalcon2270/bluefalcon-ovpn-config-manager.git)
-cd bluefalcon-ovpn-config-manager
-pip install -r requirements.txt
-python main.py
-```
+No installation is required.
+* Go to the **Releases** section on the right side of this page.
+* Download the `BlueFalcon_OpenVPN_Manager.exe` file.
+* Double-click the file to open the app.
 
 <br>
 
 ## 🌟 Features
-By launching the application, you are greeted with a clean, unified dashboard featuring the following capabilities:
 
-### 1️⃣ Unified Data Dashboard
-Automatically scans your local directory and parses all `.ovpn` files into a clean visual table. Instantly see target hosts, ports, and current unmasked credentials for every file at a glance.
-
-### 2️⃣ Authentication Management
-Seamlessly inject or completely wipe inline `<auth-user-pass>` credential blocks. The app intelligently locates the correct insertion points and preserves your critical certificate blocks (`<ca>`, `<cert>`) without corrupting the file.
-
-### 3️⃣ Intelligent Auto-Renaming
-Extracts the destination server hostname from the `remote` directive inside the config and renames the file instantly. Includes a smart duplicate handler that sequentially numbers files (e.g., `host (1).ovpn`) so you never accidentally overwrite existing configs.
-
-### 4️⃣ Background Threading & Safety
-Utilizes asynchronous `QThread` workers so the interface never freezes during large batch operations. Includes OS validation, idempotency checks, and built-in diagnostic logging.
-
-### 5️⃣ Material Design 3 GUI
-A fully custom, modern interface featuring a dark mode color palette, flat Unicode UI icons, rounded layout borders, and a dynamic status badge for real-time visual feedback. 
+* **Authentication Management:** Instantly add your username and password into your `.ovpn` files so you can auto-login without typing them every time. You can also wipe them clean just as easily.
+* **Intelligent Auto-Renaming:** Automatically renames your config files based on the server they connect to, making them easy to identify.
+* **Clean and Simple Interface:** A dark-mode, modern dashboard that shows all your files, target servers, and current passwords in one clear table.
 
 <br>
 
-## 📂 Modular Architecture (v1.6)
-The codebase has been refactored for professional scalability:
-* `main.py`: Application entry point and Windows OS validation.
-* `gui.py`: PyQt6 frontend, asynchronous worker management, and logging configurations.
-* `core.py`: Backend `.ovpn` parsing, credential injection, file manipulation logic, and network diagnostics.
+## 💻 For Developers
 
-<br>
+If you want to edit the Python code or build the app yourself, the code is organized into three simple files (`main.py`, `gui.py`, and `core.py`). 
 
-## 🛠️ Build Your Own .exe
-To compile the modular scripts into a single standalone executable using PyInstaller, run:
+To build your own `.exe` file, install the requirements and run this command:
 
 ```cmd
 pyinstaller --noconfirm --onedir --windowed --name "BlueFalconVPNManager" "main.py"
@@ -71,8 +44,6 @@ pyinstaller --noconfirm --onedir --windowed --name "BlueFalconVPNManager" "main.
 <br>
 
 ## ✅ Supported Systems
-| Operating System | Compatibility | Notes |
-| :--- | :---: | :--- |
-| **Windows 11** | ✅ | Fully Supported |
-| **Windows 10** | ✅ | Fully Supported |
-| **Linux / macOS** | ❌ | Currently locked to Windows OS validation |
+
+* **Windows 11:** Fully Supported
+* **Windows 10:** Fully Supported
