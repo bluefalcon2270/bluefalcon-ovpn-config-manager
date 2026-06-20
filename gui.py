@@ -1,4 +1,4 @@
-# Version: v1.6
+# Version: v1.7
 # BlueFalcon OpenVPN Config Manager - GUI Frontend
 
 import logging
@@ -73,17 +73,24 @@ class AboutDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("About")
-        self.setFixedSize(300, 150)
+        self.setFixedSize(350, 200)
         self.setStyleSheet("""
             QDialog { background-color: #2B2D31; color: white; border-radius: 8px; }
             QLabel { font-size: 14px; }
-            QPushButton { background-color: #A8C7FA; border: none; padding: 6px 12px; border-radius: 4px; color: #062E6F; font-weight: bold; }
+            QPushButton { background-color: #A8C7FA; border: none; padding: 6px 12px; border-radius: 4px; color: #062E6F; font-family: 'Segoe UI', Arial, sans-serif; font-weight: bold; font-size: 14px; }
             QPushButton:hover { background-color: #D3E3FD; }
+            a { color: #A8C7FA; text-decoration: none; }
+            a:hover { text-decoration: underline; }
         """)
         
         layout = QVBoxLayout(self)
-        title = QLabel("<b>BlueFalcon Config Manager</b><br>v1.6")
+        title = QLabel(
+            "<b>BlueFalcon Config Manager</b><br>v1.7<br><br>"
+            "Created by BlueFalcon<br><br>"
+            "<a href='https://github.com/bluefalcon2270/bluefalcon-ovpn-config-manager'>GitHub Repository</a>"
+        )
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title.setOpenExternalLinks(True)
         
         btn_close = QPushButton("Close")
         btn_close.clicked.connect(self.accept)
@@ -113,16 +120,16 @@ class MainWindow(QMainWindow):
             QWidget { color: #E3E3E3; font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; }
             QLineEdit { background-color: #2B2D31; border: 1px solid #44474A; padding: 0px 10px; border-radius: 6px; color: #FFFFFF; font-size: 13px; }
             QLineEdit:focus { border: 1px solid #A8C7FA; }
-            QPushButton { background-color: #A8C7FA; border: none; border-radius: 6px; color: #062E6F; font-weight: bold; font-size: 14px; }
+            QPushButton { background-color: #A8C7FA; border: none; border-radius: 6px; color: #062E6F; font-family: 'Segoe UI', Arial, sans-serif; font-weight: bold; font-size: 14px; padding: 4px; }
             QPushButton:hover { background-color: #D3E3FD; }
             QPushButton:disabled { background-color: #44474A; color: #8E918F; }
             QPushButton#danger { background-color: #F2B8B5; color: #601410; }
             QPushButton#danger:hover { background-color: #F9DEDC; }
-            QPushButton#overlay_btn { background-color: #2B2D31; border: 1px solid #44474A; border-radius: 6px; font-size: 14px; color: #A8C7FA; }
+            QPushButton#overlay_btn { background-color: #2B2D31; border: 1px solid #44474A; border-radius: 6px; font-size: 16px; font-weight: bold; color: #A8C7FA; }
             QPushButton#overlay_btn:hover { background-color: #383A40; color: #D3E3FD; }
             QTextEdit { background-color: #1E1F22; border: 1px solid #44474A; color: #A0A0A0; padding: 10px; border-radius: 6px; font-family: Consolas, monospace; font-size: 12px; }
             QTableWidget { background-color: #1E1F22; alternate-background-color: #242528; border: 1px solid #44474A; border-radius: 6px; color: #E3E3E3; gridline-color: transparent; }
-            QHeaderView::section { background-color: #1E1F22; color: #A8C7FA; padding: 6px; border: none; border-bottom: 1px solid #44474A; font-weight: bold; font-size: 13px; }
+            QHeaderView::section { background-color: #1E1F22; color: #A8C7FA; padding: 6px; border: none; border-bottom: 1px solid #44474A; font-weight: bold; font-size: 13px; text-align: left; }
             QTableWidget::item { padding: 4px; border-bottom: 1px solid #2B2D31; }
             QTableWidget::item:selected { background-color: #35383D; }
         """)
@@ -206,7 +213,7 @@ class MainWindow(QMainWindow):
 
         refresh_wrapper = QWidget()
         refresh_box = QVBoxLayout(refresh_wrapper)
-        refresh_box.setContentsMargins(0, 8, 24, 0)
+        refresh_box.setContentsMargins(0, 8, 8, 0)
         
         self.btn_refresh = QPushButton("↻")
         self.btn_refresh.setObjectName("overlay_btn")
@@ -228,7 +235,7 @@ class MainWindow(QMainWindow):
 
         clear_wrapper = QWidget()
         clear_box = QVBoxLayout(clear_wrapper)
-        clear_box.setContentsMargins(0, 8, 24, 0)
+        clear_box.setContentsMargins(0, 8, 8, 0)
         
         self.btn_clear_log = QPushButton("✕")
         self.btn_clear_log.setObjectName("overlay_btn")
@@ -294,7 +301,11 @@ class MainWindow(QMainWindow):
             self.table.setItem(row, 6, QTableWidgetItem(info["pass"]))
             
             self.table.item(row, 1).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.table.item(row, 2).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+            self.table.item(row, 3).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
             self.table.item(row, 4).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.table.item(row, 5).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+            self.table.item(row, 6).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
         self.btn_refresh.raise_()
 
