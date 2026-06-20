@@ -1,4 +1,4 @@
-# Version: v1.7
+# Version: v1.8
 # BlueFalcon OpenVPN Config Manager - GUI Frontend
 
 import logging
@@ -85,7 +85,7 @@ class AboutDialog(QDialog):
         
         layout = QVBoxLayout(self)
         title = QLabel(
-            "<b>BlueFalcon Config Manager</b><br>v1.7<br><br>"
+            "<b>BlueFalcon Config Manager</b><br>v1.8<br><br>"
             "Created by BlueFalcon<br><br>"
             "<a href='https://github.com/bluefalcon2270/bluefalcon-ovpn-config-manager'>GitHub Repository</a>"
         )
@@ -129,7 +129,9 @@ class MainWindow(QMainWindow):
             QPushButton#overlay_btn:hover { background-color: #383A40; color: #D3E3FD; }
             QTextEdit { background-color: #1E1F22; border: 1px solid #44474A; color: #A0A0A0; padding: 10px; border-radius: 6px; font-family: Consolas, monospace; font-size: 12px; }
             QTableWidget { background-color: #1E1F22; alternate-background-color: #242528; border: 1px solid #44474A; border-radius: 6px; color: #E3E3E3; gridline-color: transparent; }
-            QHeaderView::section { background-color: #1E1F22; color: #A8C7FA; padding: 6px; border: none; border-bottom: 1px solid #44474A; font-weight: bold; font-size: 13px; text-align: left; }
+            
+            /* Unified padding and removed text-align to let Python take strict control */
+            QHeaderView::section { background-color: #1E1F22; color: #A8C7FA; padding: 4px; border: none; border-bottom: 1px solid #44474A; font-weight: bold; font-size: 13px; }
             QTableWidget::item { padding: 4px; border-bottom: 1px solid #2B2D31; }
             QTableWidget::item:selected { background-color: #35383D; }
         """)
@@ -194,6 +196,23 @@ class MainWindow(QMainWindow):
         self.table.setHorizontalHeader(self.checkbox_header)
         
         self.table.setHorizontalHeaderLabels(["", "#", "File Name", "Target Host", "Port", "Username", "Password"])
+        
+        # Explicitly lock the header alignments in Python
+        header_alignments = [
+            Qt.AlignmentFlag.AlignCenter,  # Checkbox (0)
+            Qt.AlignmentFlag.AlignCenter,  # # (1)
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,  # File Name (2)
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,  # Target Host (3)
+            Qt.AlignmentFlag.AlignCenter,  # Port (4)
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,  # Username (5)
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter   # Password (6)
+        ]
+        
+        for i, align in enumerate(header_alignments):
+            item = self.table.horizontalHeaderItem(i)
+            if item:
+                item.setTextAlignment(align)
+
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.table.setAlternatingRowColors(True)
         self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
@@ -300,6 +319,7 @@ class MainWindow(QMainWindow):
             self.table.setItem(row, 5, QTableWidgetItem(info["user"]))
             self.table.setItem(row, 6, QTableWidgetItem(info["pass"]))
             
+            # Apply identical alignments to the data rows
             self.table.item(row, 1).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             self.table.item(row, 2).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
             self.table.item(row, 3).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
