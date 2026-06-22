@@ -1,4 +1,4 @@
-# Version: v1.8
+# Version: v1.9
 # BlueFalcon OpenVPN Config Manager - GUI Frontend
 
 import logging
@@ -85,7 +85,7 @@ class AboutDialog(QDialog):
         
         layout = QVBoxLayout(self)
         title = QLabel(
-            "<b>BlueFalcon Config Manager</b><br>v1.8<br><br>"
+            "<b>BlueFalcon Config Manager</b><br>v1.9<br><br>"
             "Created by BlueFalcon<br><br>"
             "<a href='https://github.com/bluefalcon2270/bluefalcon-ovpn-config-manager'>GitHub Repository</a>"
         )
@@ -129,8 +129,6 @@ class MainWindow(QMainWindow):
             QPushButton#overlay_btn:hover { background-color: #383A40; color: #D3E3FD; }
             QTextEdit { background-color: #1E1F22; border: 1px solid #44474A; color: #A0A0A0; padding: 10px; border-radius: 6px; font-family: Consolas, monospace; font-size: 12px; }
             QTableWidget { background-color: #1E1F22; alternate-background-color: #242528; border: 1px solid #44474A; border-radius: 6px; color: #E3E3E3; gridline-color: transparent; }
-            
-            /* Unified padding and removed text-align to let Python take strict control */
             QHeaderView::section { background-color: #1E1F22; color: #A8C7FA; padding: 4px; border: none; border-bottom: 1px solid #44474A; font-weight: bold; font-size: 13px; }
             QTableWidget::item { padding: 4px; border-bottom: 1px solid #2B2D31; }
             QTableWidget::item:selected { background-color: #35383D; }
@@ -197,21 +195,11 @@ class MainWindow(QMainWindow):
         
         self.table.setHorizontalHeaderLabels(["", "#", "File Name", "Target Host", "Port", "Username", "Password"])
         
-        # Explicitly lock the header alignments in Python
-        header_alignments = [
-            Qt.AlignmentFlag.AlignCenter,  # Checkbox (0)
-            Qt.AlignmentFlag.AlignCenter,  # # (1)
-            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,  # File Name (2)
-            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,  # Target Host (3)
-            Qt.AlignmentFlag.AlignCenter,  # Port (4)
-            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,  # Username (5)
-            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter   # Password (6)
-        ]
-        
-        for i, align in enumerate(header_alignments):
+        # Force every single header to be perfectly centered
+        for i in range(7):
             item = self.table.horizontalHeaderItem(i)
             if item:
-                item.setTextAlignment(align)
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.table.setAlternatingRowColors(True)
@@ -220,11 +208,16 @@ class MainWindow(QMainWindow):
         self.table.setShowGrid(False)
         
         header = self.table.horizontalHeader()
-        header.resizeSection(0, 35)
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
+        self.table.setColumnWidth(0, 40)
         header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
-        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
+        
+        # SMART EXCEL SIZING: Let File Name and Host auto-expand to fit text perfectly
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
+        
+        # Let Username and Password evenly split all the remaining free space
         header.setSectionResizeMode(5, QHeaderView.ResizeMode.Stretch)
         header.setSectionResizeMode(6, QHeaderView.ResizeMode.Stretch)
         
@@ -319,13 +312,9 @@ class MainWindow(QMainWindow):
             self.table.setItem(row, 5, QTableWidgetItem(info["user"]))
             self.table.setItem(row, 6, QTableWidgetItem(info["pass"]))
             
-            # Apply identical alignments to the data rows
-            self.table.item(row, 1).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.table.item(row, 2).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-            self.table.item(row, 3).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-            self.table.item(row, 4).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.table.item(row, 5).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-            self.table.item(row, 6).setTextAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+            # Force every single data cell to be perfectly centered to match the headers
+            for col in range(1, 7):
+                self.table.item(row, col).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.btn_refresh.raise_()
 
