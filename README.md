@@ -12,7 +12,8 @@
 </div>
 
 An automated desktop application designed to manage your OpenVPN (`.ovpn`) files. It allows you to monitor, inject, and remove credentials, as well as automatically rename files based on their destination server.
-<br><br>
+
+![alt text](<Screenshot 2026-06-23 141231.png>)
 
 ## 🚀 How to Use
 
