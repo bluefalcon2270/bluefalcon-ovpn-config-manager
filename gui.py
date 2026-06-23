@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
     QTableWidget, QTableWidgetItem, QHeaderView, QAbstractItemView, 
     QDialog, QStyle, QStyleOptionButton
 )
+from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt, pyqtSignal, QObject, QRect
 from core import ScannerWorker, ActionWorker, is_admin, check_network
 
@@ -103,6 +104,11 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("BlueFalcon OpenVPN Config Manager")
         self.setMinimumSize(1000, 700)
+        
+        icon_path = Path(__file__).parent / "icon.ico"
+        if icon_path.exists():
+            self.setWindowIcon(QIcon(str(icon_path)))
+
         self.target_directory = Path.cwd()
         self.scanner_worker = None
         self.action_worker = None
@@ -141,7 +147,6 @@ class MainWindow(QMainWindow):
         main_layout.setContentsMargins(20, 20, 20, 20)
         main_layout.setSpacing(15)
 
-        # --- Top Action Bar ---
         top_bar = QHBoxLayout()
         top_bar.setSpacing(10)
         
@@ -183,7 +188,6 @@ class MainWindow(QMainWindow):
 
         main_layout.addLayout(top_bar)
 
-        # --- Data Table ---
         table_container = QWidget()
         table_layout = QGridLayout(table_container)
         table_layout.setContentsMargins(0, 0, 0, 0)
@@ -197,7 +201,6 @@ class MainWindow(QMainWindow):
         
         self.table.setHorizontalHeaderLabels(["", "#", "File Name", "Target Host", "Port", "Username", "Password"])
         
-        # Center all column headers
         for i in range(7):
             item = self.table.horizontalHeaderItem(i)
             if item:
@@ -210,12 +213,11 @@ class MainWindow(QMainWindow):
         self.table.setShowGrid(False)
         
         header = self.table.horizontalHeader()
-        header.setMinimumHeight(46) # Increased height to perfectly center the Refresh button vertically
+        header.setMinimumHeight(46)
         
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
         self.table.setColumnWidth(0, 40)
         
-        # Intelligent Excel-like sizing
         header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
@@ -227,7 +229,6 @@ class MainWindow(QMainWindow):
 
         refresh_wrapper = QWidget()
         refresh_box = QVBoxLayout(refresh_wrapper)
-        # Exactly 8px top, 8px right padding centers the 30px button cleanly inside the 46px header
         refresh_box.setContentsMargins(0, 8, 8, 0) 
         
         self.btn_refresh = QPushButton("↻")
@@ -240,7 +241,6 @@ class MainWindow(QMainWindow):
         table_layout.addWidget(refresh_wrapper, 0, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
         main_layout.addWidget(table_container, stretch=2)
 
-        # --- Log Viewer ---
         log_container = QWidget()
         log_layout = QGridLayout(log_container)
         log_layout.setContentsMargins(0, 0, 0, 0)
@@ -251,7 +251,6 @@ class MainWindow(QMainWindow):
 
         clear_wrapper = QWidget()
         clear_box = QVBoxLayout(clear_wrapper)
-        # Symmetrical 8px top/right padding matching the Refresh button perfectly
         clear_box.setContentsMargins(0, 8, 8, 0)
         
         self.btn_clear_log = QPushButton("✕")
@@ -317,7 +316,6 @@ class MainWindow(QMainWindow):
             self.table.setItem(row, 5, QTableWidgetItem(info["user"]))
             self.table.setItem(row, 6, QTableWidgetItem(info["pass"]))
             
-            # Force every single data cell to be perfectly centered to match the headers exactly
             for col in range(1, 7):
                 self.table.item(row, col).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
 
